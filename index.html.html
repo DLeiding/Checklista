@@ -1108,7 +1108,8 @@ body {
   /* Hide UI chrome */
   .bottom-bar, .job-header-actions, .section-check-all,
   .item-actions-row, .add-item-row, .btn-add-photo,
-  .photo-remove, .item-edit-row, .voice-indicator { display: none !important; }
+  .photo-remove, .item-edit-row, .voice-indicator,
+  .report-header { display: none !important; }
 
   /* Remove browser URL/date headers and footers */
   @page {
@@ -2151,38 +2152,35 @@ function showReport() {
   ` : '';
 
   document.getElementById('report-body').innerHTML = `
-    <div class="report-card" style="display:flex;align-items:center;gap:14px">
-      <img src="data:image/png;base64,${LOGO_B64}" style="width:52px;height:52px;object-fit:contain;border-radius:10px">
-      <div>
-        <div style="font-size:18px;font-weight:700">Högt & Lågt-Städ AB</div>
-        <div style="font-size:13px;color:var(--muted)">Städrapport · ${p.date}</div>
+    <div class="report-card" style="display:flex;align-items:center;gap:14px;padding:16px 18px">
+      <img src="data:image/png;base64,${LOGO_B64}" style="width:48px;height:48px;object-fit:contain;border-radius:10px;flex-shrink:0">
+      <div style="flex:1;min-width:0">
+        <div style="font-size:17px;font-weight:700;line-height:1.2">Högt & Lågt-Städ AB</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:2px">Städrapport · ${p.date}</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--border)">
+          <div style="font-size:15px;font-weight:700;color:var(--text)">${esc(p.address)}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:2px">${tmpl.label}${p.workers.length ? ' &nbsp;·&nbsp; ' + p.workers.join(', ') : ''}</div>
+        </div>
       </div>
     </div>
 
-    <div class="report-card">
-      <h2>Projektinfo</h2>
-      <div style="font-size:15px;font-weight:600;margin-bottom:4px">${esc(p.address)}</div>
-      <div style="font-size:13px;color:var(--muted)">${tmpl.label}${p.workers.length ? ' · ' + p.workers.join(', ') : ''}</div>
-    </div>
-
-    <div class="report-card">
-      <h2>Sammanfattning</h2>
-      <div class="report-stat-grid">
-        <div class="report-stat">
-          <div class="report-stat-num">${doneCount}</div>
-          <div class="report-stat-label">Avklarade punkter</div>
+    <div class="report-card" style="padding:14px 18px">
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px">
+          <div style="font-size:22px;font-weight:800;color:var(--accent)">${doneCount}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Klara</div>
         </div>
-        <div class="report-stat">
-          <div class="report-stat-num">${total - doneCount}</div>
-          <div class="report-stat-label">Återstår</div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px">
+          <div style="font-size:22px;font-weight:800;color:${total - doneCount > 0 ? 'var(--warn)' : 'var(--accent)'}">${total - doneCount}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Återstår</div>
         </div>
-        <div class="report-stat">
-          <div class="report-stat-num">${withComments}</div>
-          <div class="report-stat-label">Felanmälningar</div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px">
+          <div style="font-size:22px;font-weight:800;color:${withComments > 0 ? 'var(--danger)' : 'var(--accent)'}">${withComments}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Felanm.</div>
         </div>
-        <div class="report-stat">
-          <div class="report-stat-num">${withPhotos}</div>
-          <div class="report-stat-label">Foto-punkter</div>
+        <div style="text-align:center;background:var(--bg);border-radius:8px;padding:10px 6px">
+          <div style="font-size:22px;font-weight:800;color:var(--accent)">${withPhotos}</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Foton</div>
         </div>
       </div>
     </div>
